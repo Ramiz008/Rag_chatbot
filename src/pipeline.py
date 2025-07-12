@@ -23,7 +23,6 @@ def run_rag_pipeline(user_query, emb_model, index, chunks, model_name="phi3:mini
     from src.retriever import retrieve_top_chunks
     
     top_chunks = retrieve_top_chunks(user_query, emb_model, index, chunks)
-    answer = generate_response(top_chunks, user_query, model_name)
-    return answer, top_chunks
-
+    return generate_response(top_chunks, user_query, model_name)
+    
     

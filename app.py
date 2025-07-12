@@ -28,15 +28,24 @@ user_input =st.text_input("Ask your query")
 if st.button("submit") and user_input:
     
     # Run full pipeline
-    answer, top_chunks = run_rag_pipeline(user_input, emb_model, index, chunks)
-
+    answer_stream = run_rag_pipeline(user_input, emb_model, index, chunks)
+    answer = ""
+    st.markdown("### Model Answer:")
+    answer_container=st.empty()
+    for chunk in answer_stream:
+        answer +=chunk
+        answer_container.markdown(answer)
     # Save to session history
     st.session_state.chat_history.append(
     {"question": user_input, "answer": answer})
-    # Show model answer
-    st.markdown("###  Model Answer:")
-    st.markdown(answer)
     
+if "show_history" not in st.session_state:
+    st.session_state.show_history = False
+
+if st.button("chat history"):
+    st.session_state.show_history = True
+
+if st.session_state.show_history:
     # Show chat history
     st.markdown("##  Chat History")
     for item in st.session_state.chat_history:
